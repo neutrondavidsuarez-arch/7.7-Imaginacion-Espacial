@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLearning - Tema 7</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init({ publicKey: "3LjnpLaDboHWv0VPY" });
+        })();
+    </script>
+    <style>
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .iframe-container { position: relative; width: 100%; height: 75vh; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .nav-btn { transition: all 0.3s ease; border-bottom: 3px solid transparent; white-space: nowrap; }
+        .nav-btn:hover { transform: translateY(-2px); }
+        .nav-btn.active { border-color: #10b981; color: #10b981; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .dot-pulse { animation: pulse-dot 1.2s infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans min-h-screen">
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+                <div class="text-center lg:text-left">
+                    <h1 class="text-xl font-black text-emerald-600 tracking-tight">UNIDAD 7</h1>
+                    <p class="text-slate-500 font-bold text-xs uppercase">Tema 7.7: Imaginación Espacial</p>
+                </div>
+               
+                <nav class="flex flex-wrap justify-center gap-1 md:gap-4">
+                    <button onclick="prepQuiz('deber', this)" class="nav-btn active px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>🧪</span> Deber
+                    </button>
+                    <button onclick="prepQuiz('evaluacion', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📝</span> Repaso
+                    </button>
+                    <button onclick="prepQuiz('extra', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📚</span> Práctica
+                    </button>
+                    <button onclick="prepQuiz('evaluacion_final', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📊</span> Evaluación
+                    </button>
+                    <button onclick="showSection('pdf', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📋</span> Pizarra
+                    </button>
+                    <button onclick="showSection('video', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>🎥</span> Video
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main id="app" class="max-w-5xl mx-auto p-6">
+    </main>
+    <script>
+        const DRIVE_PDF_URL = "https://drive.google.com/file/d/14qI8yIocXQ46Yfn1PUu5Ah9mpo5LrJ4f/view?usp=sharing";
+        const DRIVE_VIDEO_URL = "https://drive.google.com/file/d/14RP2HrO-TAiYgNg3socZx2o3RPCjXR8C/view?usp=sharing";
+
+
+        // PRINCIPAL (Deber + Repaso) 30/10 preguntas
+
+        const quizData = [
+            { question: '¿Cuántas caras tiene el siguiente sólido? <br> <img src="https://i.ibb.co/CKdYcp6w/Captura-de-pantalla-2026-08-06-112250.png" alt="Descripción de la imagen" width="250" height="240">', options: ['10', '12', '9', '8'], answer: '10', explanation: ' <br> <img src="https://i.ibb.co/g2wRcwB/Captura-de-pantalla-2026-09-23-141651.png" alt="Descripción de la imagen" width="250" height="240">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la secuencia que continua <br> <img src="https://i.ibb.co/3YYR7bNN/Captura-de-pantalla-2026-08-06-113716.png" alt="Descripción de la imagen" width="400" height="240">', options: ['10', '12', '9', '8'], answer: '12', explanation: ' <br> <img src="https://i.ibb.co/TxKWMGz0/Captura-de-pantalla-2026-09-23-142321.png" alt="Descripción de la imagen" width="450" height="250">.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Cuántas caras tiene el siguiente sólido? <br> <img src="https://i.ibb.co/bjgYzJR7/Captura-de-pantalla-2026-08-06-113917.png" alt="Descripción de la imagen" width="200" height="240">', options: ['10', '12', '14', '13'], answer: '14', explanation: ' <br> <img src="https://i.ibb.co/HDbDzJHc/Captura-de-pantalla-2026-09-23-142711.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la vista que se indica en el objetivo mostrado. <br> <img src="https://i.ibb.co/mVRpnnbJ/Captura-de-pantalla-2026-08-06-114050.png" alt="Descripción de la imagen" width="400" height="440">', options: ['1', '2', '3', '4'], answer: '1', explanation: ' <br> <img src="https://i.ibb.co/4gFKSX4g/Captura-de-pantalla-2026-09-23-143315.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la vista frontal de la figura <br> <img src="https://i.ibb.co/ymLWvtZV/Captura-de-pantalla-2026-08-06-114223.png" alt="Descripción de la imagen" width="400" height="440">', options: ['1', '2', '3', '4'], answer: '4', explanation: ' <br> <img src="https://i.ibb.co/GvTsGXg1/Captura-de-pantalla-2026-09-23-143513.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la vista del objeto tridimensional. Considere que las líneas entrecortadas son aristas ocultas. <br> <img src="https://i.ibb.co/4ZyknXF2/Captura-de-pantalla-2026-08-06-114739.png" alt="Descripción de la imagen" width="400" height="500">', options: ['1', '2', '3', '4'], answer: '2', explanation: 'Cuando existe una cara escondida u oculta se la representa con línea entre punteada. <br> <img src="https://i.ibb.co/b5pTrG2J/Captura-de-pantalla-2026-09-23-144328.png" alt="Descripción de la imagen" width="450" height="450">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique el cuerpo que corresponde a las vistas. <br> <img src="https://i.ibb.co/BKLDrM6b/Captura-de-pantalla-2026-08-06-115111.png" alt="Descripción de la imagen" width="400" height="500">', options: ['1', '2', '3', '4'], answer: '4', explanation: 'En la vista se identifica que existe una inclinación de la figura, solo una parte de esta. <br> <img src="https://i.ibb.co/XZgS4LD4/Captura-de-pantalla-2026-09-23-144656.png" alt="Descripción de la imagen" width="450" height="450">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la figura que corresponde a la vista indicada por la fecha (las líneas entrecortadas representan las aristas ocultas del objeto) <br> <img src="https://i.ibb.co/bRq6STpW/Captura-de-pantalla-2026-08-06-115310.png" alt="Descripción de la imagen" width="300" height="500">', options: ['1', '2', '3', '4'], answer: '2', explanation: ' <br> <img src="https://i.ibb.co/6c7Y1ZSz/Captura-de-pantalla-2026-09-23-145500.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la imagen que completa la secuencia gráfica. <br> <img src="https://i.ibb.co/Mkv2PhgB/Captura-de-pantalla-2026-08-06-115727.png" alt="Descripción de la imagen" width="300" height="500">', options: ['1', '2', '3', '4'], answer: '3', explanation: ' <br> <img src="https://i.ibb.co/Xk5DCb51/Captura-de-pantalla-2026-09-23-145802.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique a que objeto pertenece la siguiente vista: <br> <img src="https://i.ibb.co/Myvdzd4F/Captura-de-pantalla-2026-08-06-115913.png" alt="Descripción de la imagen" width="300" height="500">', options: ['1', '2', '3', '4'], answer: '3', explanation: ' <br> <img src="https://i.ibb.co/xSS0FW53/Captura-de-pantalla-2026-09-23-145912.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique el gráfico que corresponde a la vista lateral derecha de la figura bidimensional. <br> <img src="https://i.ibb.co/FkzwhQN1/Captura-de-pantalla-2026-08-07-091252.png" alt="Descripción de la imagen" width="300" height="500">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/Cp5GmNnb/Captura-de-pantalla-2026-09-23-150124.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Determine la plantilla que construye la figura presentada. <br> <img src="https://i.ibb.co/s94NFFkp/Captura-de-pantalla-2026-08-07-091751.png" alt="Descripción de la imagen" width="300" height="400">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/QFJDqXVH/Captura-de-pantalla-2026-09-23-150503.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Qué figura se obtiene al doblar el siguiente patrón? <br> <img src="https://i.ibb.co/Ndx8DhVM/Captura-de-pantalla-2026-08-07-092059.png" alt="Descripción de la imagen" width="350" height="400">', options: ['1', '2', '3', '4'], answer: '2', explanation: ' <br> <img src="https://i.ibb.co/KcN3PDCM/Captura-de-pantalla-2026-09-23-150713.png" alt="Descripción de la imagen" width="450" height="550">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la imagen que completa la secuencia gráfica. <br> <img src="https://i.ibb.co/MxHG6Wd8/Captura-de-pantalla-2026-08-07-092225.png" alt="Descripción de la imagen" width="340" height="340">', options: ['1', '2', '3', '4'], answer: '2', explanation: ' <br> <img src="https://i.ibb.co/ZzgWC2Lq/Captura-de-pantalla-2026-09-23-151033.png" alt="Descripción de la imagen" width="450" height="550">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura: <br> <img src="https://i.ibb.co/LXBpjHhc/Captura-de-pantalla-2026-08-07-092524.png" alt="Descripción de la imagen" width="340" height="340">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/kg7qHMRw/Captura-de-pantalla-2026-09-23-151310.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la figura: <br> <img src="https://i.ibb.co/cKxv2bRf/Captura-de-pantalla-2026-08-07-092635.png" alt="Descripción de la imagen" width="400" height="300">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/RkfvNhFN/Captura-de-pantalla-2026-09-23-151436.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente imagen <br> <img src="https://i.ibb.co/bRMrm5xq/Captura-de-pantalla-2026-08-07-092840.png" alt="Descripción de la imagen" width="400" height="300">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/SX3kgthn/Captura-de-pantalla-2026-09-23-151600.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la figura: <br> <img src="https://i.ibb.co/n8KZzH4Z/Captura-de-pantalla-2026-08-07-092954.png" alt="Descripción de la imagen" width="400" height="300">', options: ['1', '2', '3', '4'], answer: '4', explanation: ' <br> <img src="https://i.ibb.co/7xmF0PLh/Captura-de-pantalla-2026-09-23-151656.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la figura: <br> <img src="https://i.ibb.co/1GSq8kSK/Captura-de-pantalla-2026-08-07-093210.png" alt="Descripción de la imagen" width="300" height="420">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/LzG43vS3/Captura-de-pantalla-2026-09-23-151814.png" alt="Descripción de la imagen" width="500" height="550">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la secuencia que continúa. <br> <img src="https://i.ibb.co/Lz48K1Ln/Captura-de-pantalla-2026-08-07-093617.png" alt="Descripción de la imagen" width="400" height="300">', options: ['1', '2', '3', '4'], answer: '4', explanation: ' <br> <img src="https://i.ibb.co/7NVNF5m1/Captura-de-pantalla-2026-09-23-151945.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/3YQsqLkb/Captura-de-pantalla-2026-08-07-093812.png" alt="Descripción de la imagen" width="400" height="300">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'E', explanation: ' <br> <img src="https://i.ibb.co/bgJj79nF/Captura-de-pantalla-2026-09-23-152859.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Armar la siguiente figura: <br> <img src="https://i.ibb.co/7xKJXJQp/Captura-de-pantalla-2026-08-07-093940.png" alt="Descripción de la imagen" width="400" height="300">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/zhyBWrD9/Captura-de-pantalla-2026-09-23-153108.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/TDpw8NsZ/Captura-de-pantalla-2026-08-07-094208.png" alt="Descripción de la imagen" width="400" height="300">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/VpNpFV7g/Captura-de-pantalla-2026-09-23-153820.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/s9NKrj5C/Captura-de-pantalla-2026-08-07-094536.png" alt="Descripción de la imagen" width="400" height="300">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'E', explanation: ' <br> <img src="https://i.ibb.co/4ZN4ssGF/Captura-de-pantalla-2026-09-23-154036.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arme la siguiente figura. <br> <img src="https://i.ibb.co/ynGcMRK4/Captura-de-pantalla-2026-08-07-094734.png" alt="Descripción de la imagen" width="400" height="300">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/99pRCkfG/Captura-de-pantalla-2026-09-23-154321.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arme la siguiente figura <br> <img src="https://i.ibb.co/7JRvzDv6/Captura-de-pantalla-2026-08-07-095121.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/n88gPn66/Captura-de-pantalla-2026-09-23-154430.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/p6sM6M9L/Captura-de-pantalla-2026-08-07-095328.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/YTcG5QBg/Captura-de-pantalla-2026-09-23-154550.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/JRr4kWR2/Captura-de-pantalla-2026-08-07-095627.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/sdN1FYdL/Captura-de-pantalla-2026-09-23-154820.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/qM9M7cvb/Captura-de-pantalla-2026-08-07-095749.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/HfJ9PFx7/Captura-de-pantalla-2026-09-23-154932.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/rf1vBQwb/Captura-de-pantalla-2026-08-07-095954.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/s9m836Cm/Captura-de-pantalla-2026-09-23-155249.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+        ];
+
+
+        // Practica 20 preguntas
+
+        const quizDataExtra = [
+            { question: 'Arma la siguiente figura <br> <img src="https://i.ibb.co/R4G7sLmd/Captura-de-pantalla-2026-08-07-100336.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/k2yyCzp9/Captura-de-pantalla-2026-09-23-155909.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la secuencia que continua <br> <img src="https://i.ibb.co/XxDPTf7t/Captura-de-pantalla-2026-08-07-100604.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/VpM3zMHg/Captura-de-pantalla-2026-09-23-160031.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/b5zHt5gR/Captura-de-pantalla-2026-08-07-100730.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/RG55hS5P/Captura-de-pantalla-2026-09-23-160241.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/MDLbLM8v/Captura-de-pantalla-2026-08-07-100955.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/gFbPkCjS/Captura-de-pantalla-2026-09-23-160743.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/C3x8PLjK/Captura-de-pantalla-2026-08-07-101122.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/jZ5SmJ3N/Captura-de-pantalla-2026-09-23-161444.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/VY8HSDn1/Captura-de-pantalla-2026-08-07-101237.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/JW6LCRyB/Captura-de-pantalla-2026-09-24-141203.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/zTb6gD53/Captura-de-pantalla-2026-08-07-101422.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/4nxdmG3v/Captura-de-pantalla-2026-09-24-141339.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/zhZkT6nM/Captura-de-pantalla-2026-08-07-101648.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/S4ZRPJww/Captura-de-pantalla-2026-09-24-141441.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/3yJR5yhZ/Captura-de-pantalla-2026-08-07-101822.png" alt="Descripción de la imagen" width="400" height="290">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/4RZrDWKM/Captura-de-pantalla-2026-09-24-141536.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/SCBnfGf/Captura-de-pantalla-2026-08-07-102106.png" alt="Descripción de la imagen" width="400" height="290">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/chthHwZd/Captura-de-pantalla-2026-09-24-141631.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique que despliegue le corresponde la siguiente figura. <br> <img src="https://i.ibb.co/9k4SchtB/Captura-de-pantalla-2026-08-07-102211.png" alt="Descripción de la imagen" width="400" height="290">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/cSXskgkc/Captura-de-pantalla-2026-09-24-141738.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique que despliegue le corresponde la siguiente figura <br> <img src="https://i.ibb.co/m5rSp2mg/Captura-de-pantalla-2026-08-07-102447.png" alt="Descripción de la imagen" width="400" height="290">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/xK9wmTkm/Captura-de-pantalla-2026-09-24-141842.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura <br> <img src="https://i.ibb.co/1fNCbfpF/Captura-de-pantalla-2026-08-07-102620.png" alt="Descripción de la imagen" width="400" height="290">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/d0GJgRcC/Captura-de-pantalla-2026-09-24-141948.png" alt="Descripción de la imagen" width="400" height="280">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/f6wJVwG/Captura-de-pantalla-2026-08-07-102830.png" alt="Descripción de la imagen" width="400" height="380">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/Y4cCs6Wd/Captura-de-pantalla-2026-09-24-142119.png" alt="Descripción de la imagen" width="400" height="350">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura <br> <img src="https://i.ibb.co/7d1W73k7/Captura-de-pantalla-2026-08-07-103008.png" alt="Descripción de la imagen" width="400" height="380">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/fGpZ4yV9/Captura-de-pantalla-2026-09-24-142358.png" alt="Descripción de la imagen" width="400" height="380">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/7JXPNDbb/Captura-de-pantalla-2026-08-07-103233.png" alt="Descripción de la imagen" width="300" height="380">', options: ['A', 'B', 'C', 'D'], answer: ['B', 'C'], explanation: ' <br> <img src="https://i.ibb.co/k2FMcvg1/Captura-de-pantalla-2026-09-24-142732.png" alt="Descripción de la imagen" width="400" height="380">.', multi: 'ON', maxSelect: 2 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/GQdQ5gvD/Captura-de-pantalla-2026-08-07-103549.png" alt="Descripción de la imagen" width="300" height="380">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/cKtLFnBQ/Captura-de-pantalla-2026-09-24-142846.png" alt="Descripción de la imagen" width="400" height="380">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/whZRtGHz/Captura-de-pantalla-2026-08-07-103710.png" alt="Descripción de la imagen" width="300" height="380">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/r2dF8PGQ/Captura-de-pantalla-2026-09-24-142940.png" alt="Descripción de la imagen" width="400" height="380">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/H04bq2k/Captura-de-pantalla-2026-08-07-103852.png" alt="Descripción de la imagen" width="380" height="380">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/Y7Bh2SZY/Captura-de-pantalla-2026-09-24-143035.png" alt="Descripción de la imagen" width="400" height="380">.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/8g0Fz95b/Captura-de-pantalla-2026-08-07-104022.png" alt="Descripción de la imagen" width="380" height="380">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/kVYvQddD/Captura-de-pantalla-2026-09-24-143129.png" alt="Descripción de la imagen" width="400" height="380">.', multi: 'OFF', maxSelect: 1 },
+        ];
+
+        // EVALUACIÓN (16 preguntas)
+
+        const quizDataEvaluacion = [
+            { question: 'Identifique el objeto geométrico que se forma a partir de la figura bidimensional. <br> <img src="https://i.ibb.co/YBK4YdLj/Captura-de-pantalla-2026-09-24-143636.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/GvXDkmFF/Captura-de-pantalla-2026-09-24-143800.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la representación bidimensional de la vista que indica el objeto. <br> <img src="https://i.ibb.co/YBZSZ3Bb/Captura-de-pantalla-2026-09-24-143840.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: 'Para este ejercicio se debe verificar línea por línea que es lo que se ve, además se debe tener en cuenta que cuando una línea no se ve por algún agujero se debe colocar línea entrecortada. <br> <img src="https://i.ibb.co/L4YX5tq/Captura-de-pantalla-2026-09-24-144002.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la figura representa la rotación del sólido. <br> <img src="https://i.ibb.co/nNKskrjJ/Captura-de-pantalla-2026-09-24-144045.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: 'Se debe verificar que cada línea sea exacta a la figura modelo. <br> <img src="https://i.ibb.co/3YMg1G90/Captura-de-pantalla-2026-09-24-144138.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la vista mostrada en la figura. <br> <img src="https://i.ibb.co/3mPVZCXj/Captura-de-pantalla-2026-09-24-144233.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: 'Para este ejercicio se debe verificar línea por línea que es lo que se ve. <br> <img src="https://i.ibb.co/C5BhLGVc/Captura-de-pantalla-2026-09-24-144328.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la vista mostrada en el sólido. <br> <img src="https://i.ibb.co/k2vG2Rhy/Captura-de-pantalla-2026-09-24-144438.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: 'Para este ejercicio se debe verificar línea por línea que es lo que se ve. <br> <img src="https://i.ibb.co/0R5y8spz/Captura-de-pantalla-2026-09-24-144543.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Doble la figura mostrada e indique que sólido corresponde. <br> <img src="https://i.ibb.co/zTS2WLfD/Captura-de-pantalla-2026-09-24-144630.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/yB4ZgL2T/Captura-de-pantalla-2026-09-24-144726.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Identifique la vista superior del siguiente sólido. <br> <img src="https://i.ibb.co/FLbYXpn9/Captura-de-pantalla-2026-09-24-144808.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: 'Para este ejercicio se debe verificar línea por línea que es lo que se ve. <br> <img src="https://i.ibb.co/dszGHLmx/Captura-de-pantalla-2026-09-24-144919.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Con cuál de los siguientes elementos es posible armar un prisma triangular. <br> <img src="https://i.ibb.co/GfZssDbK/Captura-de-pantalla-2026-09-24-145008.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'E', explanation: ' <br> <img src="https://i.ibb.co/KcYvwShs/Captura-de-pantalla-2026-09-24-145124.png" alt="Descripción de la imagen" width="580" height="250">.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Cuáles de los siguientes cubos correspondientes a la planilla? <br> <img src="https://i.ibb.co/gZd8c3Ws/Captura-de-pantalla-2026-09-24-145207.png" alt="Descripción de la imagen" width="580" height="250">', options: ['1', '2', '3', '4'], answer: '1', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/BF7yFjV/Captura-de-pantalla-2026-09-24-145300.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/rhVgHrS/Captura-de-pantalla-2026-09-24-145354.png" alt="Descripción de la imagen" width="450" height="450">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'B', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/twZT49X1/Captura-de-pantalla-2026-09-24-145543.png" alt="Descripción de la imagen" width="450" height="450">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/ksBFvT89/Captura-de-pantalla-2026-09-24-145625.png" alt="Descripción de la imagen" width="450" height="450">', options: ['A', 'B', 'C', 'D', 'E'], answer: 'B', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/Jw9KvN7J/Captura-de-pantalla-2026-09-24-145734.png" alt="Descripción de la imagen" width="450" height="450">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/xt3p7zkn/Captura-de-pantalla-2026-09-24-145815.png" alt="Descripción de la imagen" width="450" height="450">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/Q3tCLg0W/Captura-de-pantalla-2026-09-24-145929.png" alt="Descripción de la imagen" width="450" height="450">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/B2PrprHB/Captura-de-pantalla-2026-09-24-150014.png" alt="Descripción de la imagen" width="450" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/1fRWW5WL/Captura-de-pantalla-2026-09-24-150221.png" alt="Descripción de la imagen" width="450" height="250">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/Pvm1tbdr/Captura-de-pantalla-2026-09-24-150311.png" alt="Descripción de la imagen" width="500" height="150">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/xKNmxffb/Captura-de-pantalla-2026-09-24-150443.png" alt="Descripción de la imagen" width="500" height="150">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/PZF5RqwZ/Captura-de-pantalla-2026-09-24-150526.png" alt="Descripción de la imagen" width="500" height="150">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/Zb3QwfM/Captura-de-pantalla-2026-09-24-150619.png" alt="Descripción de la imagen" width="500" height="150">', multi: 'OFF', maxSelect: 1 },
+            { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/h1HqBNHf/Captura-de-pantalla-2026-09-24-150700.png" alt="Descripción de la imagen" width="500" height="150">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/8LYSKgB4/Captura-de-pantalla-2026-09-24-150757.png" alt="Descripción de la imagen" width="500" height="150">', multi: 'OFF', maxSelect: 1 },
+        ];
+
+        let state = {
+            currentMode: 'deber',
+            view: 'quiz_home',
+            studentName: '',
+            studentEmail: '',
+            activeQuestions: [],
+            currentQuestion: 0,
+            score: 0,
+            selectedAnswer: null,
+            isAnswerCorrect: null,
+            emailStatus: null,
+            emailAnalysis: null,
+            emailAnalysisMsg: ''
+        };
+
+        const disposableDomains = [
+            'tempmail.com','temp-mail.org','guerrillamail.com','10minutemail.com','mailinator.com',
+            'yopmail.com','throwawaymail.com','fakeinbox.com','trashmail.com','getnada.com',
+            'maildrop.cc','dispostable.com','sharklasers.com','guerrillamailblock.com'
+        ];
+        const trustedProviders = [
+            'gmail.com','googlemail.com','hotmail.com','hotmail.es','hotmail.co.uk','outlook.com',
+            'outlook.es','live.com','msn.com','yahoo.com','yahoo.es','icloud.com','me.com',
+            'protonmail.com','proton.me','aol.com','zoho.com','gmx.com','mail.com'
+        ];
+
+        function isValidEmailFormat(email) {
+            const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+            return re.test(email) && email.length <= 254 && !email.includes('..') && !email.startsWith('.') && !email.endsWith('.');
+        }
+
+        function analyzeEmail(email) {
+            const lower = email.toLowerCase().trim();
+            if (!lower) {
+                return { valid: false, msg: 'Escribe un correo electrónico.' };
+            }
+            if (!isValidEmailFormat(lower)) {
+                return { valid: false, msg: 'Formato inválido. Revisa que tenga @ y un dominio correcto.' };
+            }
+            const domain = lower.split('@')[1];
+            if (!domain || domain.length < 3) {
+                return { valid: false, msg: 'Dominio incompleto o inválido.' };
+            }
+            if (disposableDomains.some(d => domain === d || domain.endsWith('.' + d))) {
+                return { valid: false, msg: 'Correo temporal / desechable detectado. Usa un correo real.' };
+            }
+            const isTrusted = trustedProviders.some(p => domain === p);
+            const hasGoodTld = /\.(com|es|net|org|edu|gov|mx|ar|co|uk|de|fr|it|pt|br|cl)$/i.test(domain);
+            if (!hasGoodTld && !isTrusted) {
+                return { valid: false, msg: 'Dominio poco común o sospechoso. Usa Gmail, Hotmail/Outlook, Yahoo, etc.' };
+            }
+            let analysisText = '';
+            if (domain.includes('hotmail') || domain.includes('outlook') || domain.includes('live.com') || domain.includes('msn.com')) {
+                analysisText = 'Análisis: proveedor Microsoft (Hotmail/Outlook) detectado · formato correcto · dominio legítimo';
+            } else if (domain.includes('gmail') || domain.includes('googlemail')) {
+                analysisText = 'Análisis: proveedor Google (Gmail) detectado · formato correcto · dominio legítimo';
+            } else if (isTrusted) {
+                analysisText = 'Análisis: proveedor conocido · formato correcto · dominio legítimo';
+            } else {
+                analysisText = 'Análisis: formato válido · dominio con TLD estándar · no se detectaron patrones de correo temporal';
+            }
+            return { valid: true, msg: analysisText };
+        }
+
+        function showSection(section, btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const app = document.getElementById('app');
+            if (section === 'pdf') {
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">📄 Pizarra Virtual</h2><div class="iframe-container"><iframe src="${DRIVE_PDF_URL}" width="100%" height="100%"></iframe></div></div>`;
+            } else if (section === 'video') {
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">🎥 Video Clase</h2><div class="iframe-container"><iframe src="${DRIVE_VIDEO_URL}" width="100%" height="100%"></iframe></div></div>`;
+            }
+        }
+
+        function prepQuiz(mode, btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+           
+            state = {
+                currentMode: mode,
+                view: 'quiz_home',
+                studentName: '',
+                studentEmail: '',
+                activeQuestions: [],
+                currentQuestion: 0,
+                score: 0,
+                selectedAnswer: null,
+                isAnswerCorrect: null,
+                emailStatus: null,
+                emailAnalysis: null,
+                emailAnalysisMsg: ''
+            };
+            render();
+        }
+
+        function startQuiz() {
+            if (state.currentMode === 'deber') {
+                // Práctica: 30 preguntas en orden
+                state.activeQuestions = [...quizData].slice(0, 30);
+            } else if (state.currentMode === 'evaluacion') {
+                // Repaso: 10 preguntas aleatorias
+                state.activeQuestions = [...quizData]
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 10);
+            } else if (state.currentMode === 'extra') {
+                // Deber: 20 preguntas en orden
+                state.activeQuestions = [...quizDataExtra].slice(0, 20);
+            } else if (state.currentMode === 'evaluacion_final') {
+                // Evaluación: 16 preguntas en orden
+                state.activeQuestions = [...quizDataEvaluacion];
+            }
+            state.view = 'name_input';
+            state.emailAnalysis = null;
+            state.emailAnalysisMsg = '';
+            render();
+        }
+
+        function onEmailInput() {
+            const e = document.getElementById('email-in');
+            if (!e) return;
+            const val = e.value.trim();
+            if (val.length < 5) {
+                state.emailAnalysis = null;
+                state.emailAnalysisMsg = '';
+                updateEmailUI();
+                return;
+            }
+            state.emailAnalysis = 'checking';
+            state.emailAnalysisMsg = 'Analizando correo…';
+            updateEmailUI();
+            clearTimeout(window._emailCheckTimer);
+            window._emailCheckTimer = setTimeout(() => {
+                const result = analyzeEmail(val);
+                state.emailAnalysis = result.valid ? 'valid' : 'invalid';
+                state.emailAnalysisMsg = result.msg;
+                updateEmailUI();
+            }, 600);
+        }
+
+        function updateEmailUI() {
+            const feedback = document.getElementById('email-feedback');
+            const analysis = document.getElementById('email-analysis');
+            const input = document.getElementById('email-in');
+            if (!feedback || !analysis || !input) return;
+            if (state.emailAnalysis === 'checking') {
+                feedback.innerHTML = `<span class="text-slate-500 text-sm flex items-center gap-2"><span class="dot-pulse">●</span> Verificando…</span>`;
+                analysis.innerHTML = `<p class="text-xs text-slate-400 mt-1">${state.emailAnalysisMsg}</p>`;
+                input.classList.remove('border-red-400', 'border-emerald-400');
+                input.classList.add('border-slate-300');
+            } else if (state.emailAnalysis === 'invalid') {
+                feedback.innerHTML = `<span class="text-red-600 text-sm font-semibold">✗ Correo no válido o inexistente</span>`;
+                analysis.innerHTML = `<p class="text-xs text-red-500/80 mt-1">${state.emailAnalysisMsg}</p>`;
+                input.classList.remove('border-emerald-400', 'border-slate-300');
+                input.classList.add('border-red-400');
+            } else if (state.emailAnalysis === 'valid') {
+                feedback.innerHTML = `<span class="text-emerald-600 text-sm font-semibold">✓ Correo aceptado</span>`;
+                analysis.innerHTML = `<p class="text-xs text-emerald-600/80 mt-1">${state.emailAnalysisMsg}</p>`;
+                input.classList.remove('border-red-400', 'border-slate-300');
+                input.classList.add('border-emerald-400');
+            } else {
+                feedback.innerHTML = '';
+                analysis.innerHTML = '';
+                input.classList.remove('border-red-400', 'border-emerald-400');
+                input.classList.add('border-slate-300');
+            }
+        }
+
+        function validaDatos() {
+            const n = document.getElementById('name-in').value.trim();
+            const e = document.getElementById('email-in').value.trim();
+            if (n.length <= 2) {
+                alert("Ingresa nombre completo (mínimo 3 caracteres).");
+                return;
+            }
+            const result = analyzeEmail(e);
+            state.emailAnalysis = result.valid ? 'valid' : 'invalid';
+            state.emailAnalysisMsg = result.msg;
+            updateEmailUI();
+            if (!result.valid) return;
+            state.studentName = n;
+            state.studentEmail = e;
+            state.view = 'playing';
+            render();
+        }
+
+        // ---------- LÓGICA SINGLE + MULTI ----------
+        function isMultiQuestion(q) {
+            return q.multi === 'ON';
+        }
+
+        function arraysEqual(a, b) {
+            if (!Array.isArray(a) || !Array.isArray(b)) return false;
+            if (a.length !== b.length) return false;
+            const sa = [...a].sort();
+            const sb = [...b].sort();
+            return sa.every((v, i) => v === sb[i]);
+        }
+
+        function handleAnswer(option) {
+            if (state.isAnswerCorrect !== null) return;
+
+            const currentQ = state.activeQuestions[state.currentQuestion];
+
+            if (isMultiQuestion(currentQ)) {
+                let selected = Array.isArray(state.selectedAnswer) ? [...state.selectedAnswer] : [];
+                const idx = selected.indexOf(option);
+
+                if (idx > -1) {
+                    selected.splice(idx, 1);
+                } else {
+                    if (selected.length >= currentQ.maxSelect) return;
+                    selected.push(option);
+                }
+                state.selectedAnswer = selected;
+                render();
+            } else {
+                if (state.selectedAnswer !== null) return;
+                state.selectedAnswer = option;
+                state.isAnswerCorrect = (option === currentQ.answer);
+                if (state.isAnswerCorrect) state.score++;
+                render();
+                if (state.isAnswerCorrect) {
+                    setTimeout(() => nextQuestion(), 1000);
+                }
+            }
+        }
+
+        function checkMultiAnswer() {
+            if (state.isAnswerCorrect !== null) return;
+
+            const currentQ = state.activeQuestions[state.currentQuestion];
+            if (!isMultiQuestion(currentQ)) return;
+
+            const selected = Array.isArray(state.selectedAnswer) ? state.selectedAnswer : [];
+            if (selected.length === 0) return;
+
+            const correctAnswers = Array.isArray(currentQ.answer) ? currentQ.answer : [currentQ.answer];
+            state.isAnswerCorrect = arraysEqual(selected, correctAnswers);
+
+            if (state.isAnswerCorrect) state.score++;
+            render();
+
+            if (state.isAnswerCorrect) {
+                setTimeout(() => nextQuestion(), 1000);
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentQuestion + 1 < state.activeQuestions.length) {
+                state.currentQuestion++;
+                state.selectedAnswer = null;
+                state.isAnswerCorrect = null;
+                render();
+            } else {
+                state.view = 'results';
+                render();
+                enviarCorreo();
+            }
+        }
+
+        function enviarCorreo() {
+            if (!state.studentEmail) return;
+            state.emailStatus = 'sending';
+            render();
+            const scorePerc = Math.round((state.score / state.activeQuestions.length) * 100);
+            const totalQ = state.activeQuestions.length;
+            let imageUrl = '';
+            let mensaje = '';
+            if (scorePerc >= 90) {
+                imageUrl = 'https://img.icons8.com/color/128/medal2.png';
+                mensaje = `¡Excelente trabajo, ${state.studentName}! Obtuviste un resultado sobresaliente.`;
+            } else if (scorePerc >= 70) {
+                imageUrl = 'https://img.icons8.com/color/128/diploma.png';
+                mensaje = `¡Muy bien, ${state.studentName}! Has aprobado con un buen resultado.`;
+            } else if (scorePerc >= 50) {
+                imageUrl = 'https://img.icons8.com/color/128/ok.png';
+                mensaje = `Buen esfuerzo, ${state.studentName}. Sigue practicando para mejorar.`;
+            } else {
+                imageUrl = 'https://img.icons8.com/color/128/error.png';
+                mensaje = `Ánimo, ${state.studentName}. Revisa el material y vuelve a intentarlo.`;
+            }
+            const params = {
+                to_name: state.studentName,
+                to_email: state.studentEmail,
+                score: scorePerc,
+                correct_answers: state.score,
+                total_questions: totalQ,
+                mode_name: state.currentMode.toUpperCase(),
+                image_url: imageUrl,
+                mensaje: mensaje,
+                fecha: new Date().toLocaleDateString('es-ES', {
+                    year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                })
+            };
+            emailjs.send("service_dhvsi72", "template_cy74x9h", params)
+                .then(() => {
+                    state.emailStatus = 'success';
+                    render();
+                })
+                .catch((err) => {
+                    console.error('Error EmailJS:', err);
+                    state.emailStatus = 'error';
+                    render();
+                });
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+           
+            let modeTitle = '';
+            let modeDesc = '';
+            if (state.currentMode === 'deber') {
+                modeTitle = '🧪 Deber';
+                modeDesc = 'Resuelve las 30 preguntas del banco en orden.';
+            } else if (state.currentMode === 'evaluacion') {
+                modeTitle = '📝 Repaso';
+                modeDesc = 'Prueba de 10 preguntas seleccionadas al azar.';
+            } else if (state.currentMode === 'extra') {
+                modeTitle = '📚 Práctica';
+                modeDesc = 'Resuelve las 20 preguntas de la Práctica.';
+            } else if (state.currentMode === 'evaluacion_final') {
+                modeTitle = '📊 Evaluación';
+                modeDesc = 'Resuelve las 16 preguntas de la Evaluación.';
+            }
+           
+            if (state.view === 'quiz_home') {
+                app.innerHTML = `
+                <div class="text-center py-16 animate-fade-in bg-white rounded-[3rem] shadow-xl border">
+                    <h2 class="text-4xl font-black text-slate-800 mb-2">${modeTitle}</h2>
+                    <p class="text-slate-500 mb-8 text-lg">${modeDesc}</p>
+                    <button onclick="startQuiz()" class="bg-emerald-600 text-white px-12 py-5 rounded-2xl font-black text-xl hover:bg-emerald-700 transition-all">
+                        INICIAR
+                    </button>
+                </div>`;
+            }
+
+            if (state.view === 'name_input') {
+                app.innerHTML = `
+                <div class="max-w-md mx-auto bg-white p-10 rounded-[2.5rem] shadow-2xl animate-fade-in">
+                    <h2 class="text-2xl font-black mb-6 text-center">Registro de Estudiante</h2>
+                    <input id="name-in" type="text" placeholder="Nombre y Apellido completo" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl mb-4 focus:border-emerald-500 outline-none">
+                   
+                    <div class="relative mb-1">
+                        <input id="email-in" type="email" placeholder="Correo para recibir nota (Gmail, Hotmail…)"
+                               class="w-full p-4 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-500 outline-none transition-colors"
+                               oninput="onEmailInput()" onblur="onEmailInput()">
+                    </div>
+                   
+                    <div id="email-feedback" class="min-h-[22px] mb-1"></div>
+                    <div id="email-analysis" class="mb-5"></div>
+                   
+                    <button onclick="validaDatos()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-all">
+                        ENTRAR AL TEST
+                    </button>
+                    <p class="text-center text-[11px] text-slate-400 mt-4">Se verifica formato y se descartan correos temporales. No se envía nada hasta terminar el test.</p>
+                </div>`;
+                setTimeout(updateEmailUI, 50);
+            }
+
+            if (state.view === 'playing') {
+                const q = state.activeQuestions[state.currentQuestion];
+                const progress = ((state.currentQuestion + 1) / state.activeQuestions.length) * 100;
+                const multi = isMultiQuestion(q);
+                const selected = multi
+                    ? (Array.isArray(state.selectedAnswer) ? state.selectedAnswer : [])
+                    : (state.selectedAnswer ? [state.selectedAnswer] : []);
+
+                const multiHint = multi
+                    ? `<p class="text-sm text-sky-600 font-semibold mb-4">
+                         Selección múltiple · elige ${q.maxSelect} respuesta${q.maxSelect > 1 ? 's' : ''}
+                         ${selected.length > 0 ? `(${selected.length}/${q.maxSelect})` : ''}
+                       </p>`
+                    : '';
+
+                app.innerHTML = `
+                <div class="animate-fade-in">
+                    <div class="flex justify-between items-center mb-6 px-4">
+                        <span class="font-black text-emerald-600">${state.currentQuestion + 1} / ${state.activeQuestions.length}</span>
+                        <div class="w-48 bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full transition-all" style="width:${progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-2 leading-tight">${q.question}</h2>
+                        ${multiHint}
+                        <div class="grid gap-3">
+                            ${q.options.map(opt => {
+                                let style = "border-slate-100 bg-slate-50 hover:border-emerald-200";
+                                const isSelected = selected.includes(opt);
+
+                                if (state.isAnswerCorrect !== null) {
+                                    if (multi) {
+                                        const correctSet = Array.isArray(q.answer) ? q.answer : [q.answer];
+                                        if (correctSet.includes(opt) && isSelected) {
+                                            style = "border-emerald-500 bg-emerald-100 text-emerald-800";
+                                        } else if (isSelected && !correctSet.includes(opt)) {
+                                            style = "border-red-500 bg-red-100 text-red-800";
+                                        } else if (correctSet.includes(opt) && !isSelected) {
+                                            style = "border-emerald-300 bg-emerald-50 text-emerald-700";
+                                        }
+                                    } else {
+                                        if (isSelected) {
+                                            style = state.isAnswerCorrect
+                                                ? "border-emerald-500 bg-emerald-100 text-emerald-800"
+                                                : "border-red-500 bg-red-100 text-red-800";
+                                        }
+                                    }
+                                } else if (isSelected) {
+                                    if (multi) {
+                                        style = "border-sky-400 bg-sky-100 text-sky-800";
+                                    } else {
+                                        style = "border-emerald-500 bg-emerald-100 text-emerald-800";
+                                    }
+                                }
+
+                                return `<button onclick="handleAnswer('${opt.replace(/'/g, "\\'")}')" 
+                                            class="p-5 text-left border-2 rounded-xl font-bold transition-all ${style}">
+                                            ${opt}
+                                        </button>`;
+                            }).join('')}
+                        </div>
+
+                        ${multi && state.isAnswerCorrect === null ? `
+                            <button onclick="checkMultiAnswer()" 
+                                class="mt-6 w-full py-4 rounded-xl font-bold transition-all
+                                ${selected.length === q.maxSelect 
+                                    ? 'bg-sky-600 text-white hover:bg-sky-700' 
+                                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'}"
+                                ${selected.length !== q.maxSelect ? 'disabled' : ''}>
+                                Comprobar respuesta (${selected.length}/${q.maxSelect})
+                            </button>
+                        ` : ''}
+
+                        ${state.selectedAnswer !== null && state.isAnswerCorrect === false ? `
+                            <div class="mt-6 p-5 bg-amber-50 border border-amber-200 rounded-xl">
+                                <p class="font-bold text-amber-800 mb-2">Explicación:</p>
+                                <p class="text-slate-700">${q.explanation}</p>
+                            </div>
+                            <button onclick="nextQuestion()" class="mt-6 w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 transition-all">
+                                Siguiente pregunta
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>`;
+            }
+
+            if (state.view === 'results') {
+                const scorePerc = Math.round((state.score / state.activeQuestions.length) * 100);
+                app.innerHTML = `
+                <div class="max-w-md mx-auto text-center animate-fade-in bg-white p-12 rounded-[3rem] shadow-2xl">
+                    <h2 class="text-2xl font-black mb-2">${state.studentName}</h2>
+                    <p class="text-slate-400 uppercase text-xs font-bold mb-6">${state.currentMode}</p>
+                    <div class="text-7xl font-black text-emerald-600 mb-4">${scorePerc}%</div>
+                    <p class="text-lg font-bold text-slate-700 mb-10">${state.score} / ${state.activeQuestions.length} correctas</p>
+                    <button onclick="location.reload()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold">VOLVER AL INICIO</button>
+                    <p class="mt-6 text-xs font-bold text-slate-400">
+                        ${state.emailStatus === 'success' ? '✅ Nota e imagen enviadas al correo' :
+                          state.emailStatus === 'error' ? '⚠️ Error al enviar nota e imagen' :
+                          '⏳ Enviando nota e imagen al correo...'}
+                    </p>
+                </div>`;
+            }
+        }
+        render();
+    </script>
+</body>
+</html>
+
