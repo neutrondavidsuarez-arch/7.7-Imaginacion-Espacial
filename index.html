@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioLearning - Tema 7</title>
+    <title>BioLearning - Tema 7.7 Imaginación Espacial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
@@ -20,6 +20,7 @@
         .nav-btn.active { border-color: #10b981; color: #10b981; }
         @keyframes pulse-dot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
         .dot-pulse { animation: pulse-dot 1.2s infinite; }
+        .question-img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 0.5rem 0; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans min-h-screen">
@@ -60,10 +61,8 @@
         const DRIVE_PDF_URL = "https://drive.google.com/file/d/14qI8yIocXQ46Yfn1PUu5Ah9mpo5LrJ4f/view?usp=sharing";
         const DRIVE_VIDEO_URL = "https://drive.google.com/file/d/14RP2HrO-TAiYgNg3socZx2o3RPCjXR8C/view?usp=sharing";
 
-
         // PRINCIPAL (Deber + Repaso) 30/10 preguntas
-
-        const quizData = [
+const quizData = [
             { question: '¿Cuántas caras tiene el siguiente sólido? <br> <img src="https://i.ibb.co/CKdYcp6w/Captura-de-pantalla-2026-08-06-112250.png" alt="Descripción de la imagen" width="250" height="240">', options: ['10', '12', '9', '8'], answer: '10', explanation: ' <br> <img src="https://i.ibb.co/g2wRcwB/Captura-de-pantalla-2026-09-23-141651.png" alt="Descripción de la imagen" width="250" height="240">.', multi: 'OFF', maxSelect: 1 },
             { question: 'Identifique la secuencia que continua <br> <img src="https://i.ibb.co/3YYR7bNN/Captura-de-pantalla-2026-08-06-113716.png" alt="Descripción de la imagen" width="400" height="240">', options: ['10', '12', '9', '8'], answer: '12', explanation: ' <br> <img src="https://i.ibb.co/TxKWMGz0/Captura-de-pantalla-2026-09-23-142321.png" alt="Descripción de la imagen" width="450" height="250">.', multi: 'OFF', maxSelect: 1 },
             { question: '¿Cuántas caras tiene el siguiente sólido? <br> <img src="https://i.ibb.co/bjgYzJR7/Captura-de-pantalla-2026-08-06-113917.png" alt="Descripción de la imagen" width="200" height="240">', options: ['10', '12', '14', '13'], answer: '14', explanation: ' <br> <img src="https://i.ibb.co/HDbDzJHc/Captura-de-pantalla-2026-09-23-142711.png" alt="Descripción de la imagen" width="450" height="450">.', multi: 'OFF', maxSelect: 1 },
@@ -96,10 +95,8 @@
             { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/rf1vBQwb/Captura-de-pantalla-2026-08-07-095954.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: ' <br> <img src="https://i.ibb.co/s9m836Cm/Captura-de-pantalla-2026-09-23-155249.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
         ];
 
-
-        // Practica 20 preguntas
-
-        const quizDataExtra = [
+        // Práctica 20 preguntas
+const quizDataExtra = [
             { question: 'Arma la siguiente figura <br> <img src="https://i.ibb.co/R4G7sLmd/Captura-de-pantalla-2026-08-07-100336.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'C', explanation: ' <br> <img src="https://i.ibb.co/k2yyCzp9/Captura-de-pantalla-2026-09-23-155909.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
             { question: 'Identifique la secuencia que continua <br> <img src="https://i.ibb.co/XxDPTf7t/Captura-de-pantalla-2026-08-07-100604.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: ' <br> <img src="https://i.ibb.co/VpM3zMHg/Captura-de-pantalla-2026-09-23-160031.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
             { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/b5zHt5gR/Captura-de-pantalla-2026-08-07-100730.png" alt="Descripción de la imagen" width="400" height="280">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/RG55hS5P/Captura-de-pantalla-2026-09-23-160241.png" alt="Descripción de la imagen" width="500" height="400">.', multi: 'OFF', maxSelect: 1 },
@@ -122,9 +119,8 @@
             { question: 'Arma la siguiente figura. <br> <img src="https://i.ibb.co/8g0Fz95b/Captura-de-pantalla-2026-08-07-104022.png" alt="Descripción de la imagen" width="380" height="380">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: ' <br> <img src="https://i.ibb.co/kVYvQddD/Captura-de-pantalla-2026-09-24-143129.png" alt="Descripción de la imagen" width="400" height="380">.', multi: 'OFF', maxSelect: 1 },
         ];
 
-        // EVALUACIÓN (16 preguntas)
-
-        const quizDataEvaluacion = [
+        // EVALUACIÓN 16 preguntas
+const quizDataEvaluacion = [
             { question: 'Identifique el objeto geométrico que se forma a partir de la figura bidimensional. <br> <img src="https://i.ibb.co/YBK4YdLj/Captura-de-pantalla-2026-09-24-143636.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/GvXDkmFF/Captura-de-pantalla-2026-09-24-143800.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
             { question: 'Identifique la representación bidimensional de la vista que indica el objeto. <br> <img src="https://i.ibb.co/YBZSZ3Bb/Captura-de-pantalla-2026-09-24-143840.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'B', explanation: 'Para este ejercicio se debe verificar línea por línea que es lo que se ve, además se debe tener en cuenta que cuando una línea no se ve por algún agujero se debe colocar línea entrecortada. <br> <img src="https://i.ibb.co/L4YX5tq/Captura-de-pantalla-2026-09-24-144002.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
             { question: 'Identifique la figura representa la rotación del sólido. <br> <img src="https://i.ibb.co/nNKskrjJ/Captura-de-pantalla-2026-09-24-144045.png" alt="Descripción de la imagen" width="580" height="250">', options: ['A', 'B', 'C', 'D'], answer: 'A', explanation: 'Se debe verificar que cada línea sea exacta a la figura modelo. <br> <img src="https://i.ibb.co/3YMg1G90/Captura-de-pantalla-2026-09-24-144138.png" alt="Descripción de la imagen" width="580" height="250">', multi: 'OFF', maxSelect: 1 },
@@ -143,6 +139,16 @@
             { question: 'Reemplaza el signo de interrogación. <br> <img src="https://i.ibb.co/h1HqBNHf/Captura-de-pantalla-2026-09-24-150700.png" alt="Descripción de la imagen" width="500" height="150">', options: ['A', 'B', 'C', 'D'], answer: 'D', explanation: 'Se debe tener en cuantas las caras que pueden estar juntas y aquellas que no lo pueden estar. <br> <img src="https://i.ibb.co/8LYSKgB4/Captura-de-pantalla-2026-09-24-150757.png" alt="Descripción de la imagen" width="500" height="150">', multi: 'OFF', maxSelect: 1 },
         ];
 
+        // ========== CONFIGURACIÓN DEL TEMPORIZADOR DE EVALUACIÓN ==========
+        const EVAL_TIMER_SECONDS = 960; // 16 minutos
+
+        const EVAL_TIMER_PHASES = [
+            { minSeconds: 480, colorClass: 'text-emerald-600 bg-emerald-50 border-emerald-300' },
+            { minSeconds: 60,  colorClass: 'text-amber-600 bg-amber-50 border-amber-300' },
+            { minSeconds: 0,   colorClass: 'text-red-600 bg-red-50 border-red-300' }
+        ];
+        // ==================================================================
+
         let state = {
             currentMode: 'deber',
             view: 'quiz_home',
@@ -155,8 +161,11 @@
             isAnswerCorrect: null,
             emailStatus: null,
             emailAnalysis: null,
-            emailAnalysisMsg: ''
+            emailAnalysisMsg: '',
+            timeLeft: 0
         };
+
+        let timerInterval = null;
 
         const disposableDomains = [
             'tempmail.com','temp-mail.org','guerrillamail.com','10minutemail.com','mailinator.com',
@@ -176,16 +185,10 @@
 
         function analyzeEmail(email) {
             const lower = email.toLowerCase().trim();
-            if (!lower) {
-                return { valid: false, msg: 'Escribe un correo electrónico.' };
-            }
-            if (!isValidEmailFormat(lower)) {
-                return { valid: false, msg: 'Formato inválido. Revisa que tenga @ y un dominio correcto.' };
-            }
+            if (!lower) return { valid: false, msg: 'Escribe un correo electrónico.' };
+            if (!isValidEmailFormat(lower)) return { valid: false, msg: 'Formato inválido. Revisa que tenga @ y un dominio correcto.' };
             const domain = lower.split('@')[1];
-            if (!domain || domain.length < 3) {
-                return { valid: false, msg: 'Dominio incompleto o inválido.' };
-            }
+            if (!domain || domain.length < 3) return { valid: false, msg: 'Dominio incompleto o inválido.' };
             if (disposableDomains.some(d => domain === d || domain.endsWith('.' + d))) {
                 return { valid: false, msg: 'Correo temporal / desechable detectado. Usa un correo real.' };
             }
@@ -210,18 +213,19 @@
         function showSection(section, btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            stopTimer();
             const app = document.getElementById('app');
             if (section === 'pdf') {
-                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">📄 Pizarra Virtual</h2><div class="iframe-container"><iframe src="${DRIVE_PDF_URL}" width="100%" height="100%"></iframe></div></div>`;
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">📄 Pizarra Virtual</h2><div class="iframe-container"><iframe src="${DRIVE_PDF_URL}" width="100%" height="100%" allow="autoplay"></iframe></div></div>`;
             } else if (section === 'video') {
-                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">🎥 Video Clase</h2><div class="iframe-container"><iframe src="${DRIVE_VIDEO_URL}" width="100%" height="100%"></iframe></div></div>`;
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">🎥 Video Clase</h2><div class="iframe-container"><iframe src="${DRIVE_VIDEO_URL}" width="100%" height="100%" allow="autoplay"></iframe></div></div>`;
             }
         }
 
         function prepQuiz(mode, btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-           
+            stopTimer();
             state = {
                 currentMode: mode,
                 view: 'quiz_home',
@@ -234,25 +238,22 @@
                 isAnswerCorrect: null,
                 emailStatus: null,
                 emailAnalysis: null,
-                emailAnalysisMsg: ''
+                emailAnalysisMsg: '',
+                timeLeft: 0
             };
             render();
         }
 
         function startQuiz() {
             if (state.currentMode === 'deber') {
-                // Práctica: 30 preguntas en orden
-                state.activeQuestions = [...quizData].slice(0, 30);
+                state.activeQuestions = [...quizData];
             } else if (state.currentMode === 'evaluacion') {
-                // Repaso: 10 preguntas aleatorias
                 state.activeQuestions = [...quizData]
                     .sort(() => 0.5 - Math.random())
                     .slice(0, 10);
             } else if (state.currentMode === 'extra') {
-                // Deber: 20 preguntas en orden
-                state.activeQuestions = [...quizDataExtra].slice(0, 20);
+                state.activeQuestions = [...quizDataExtra];
             } else if (state.currentMode === 'evaluacion_final') {
-                // Evaluación: 16 preguntas en orden
                 state.activeQuestions = [...quizDataEvaluacion];
             }
             state.view = 'name_input';
@@ -326,10 +327,55 @@
             state.studentName = n;
             state.studentEmail = e;
             state.view = 'playing';
+            if (state.currentMode === 'evaluacion_final') {
+                startTimer();
+            }
             render();
         }
 
-        // ---------- LÓGICA SINGLE + MULTI ----------
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function getTimerPhaseClass(remaining) {
+            for (const phase of EVAL_TIMER_PHASES) {
+                if (remaining >= phase.minSeconds) {
+                    return phase.colorClass;
+                }
+            }
+            return EVAL_TIMER_PHASES[EVAL_TIMER_PHASES.length - 1].colorClass;
+        }
+
+        function startTimer() {
+            stopTimer();
+            state.timeLeft = EVAL_TIMER_SECONDS;
+            timerInterval = setInterval(() => {
+                state.timeLeft--;
+                if (state.timeLeft <= 0) {
+                    state.timeLeft = 0;
+                    stopTimer();
+                    state.view = 'results';
+                    render();
+                    enviarCorreo();
+                    return;
+                }
+                const timerEl = document.getElementById('eval-timer');
+                if (timerEl) {
+                    timerEl.textContent = formatTime(state.timeLeft);
+                    timerEl.className = `px-3 py-1.5 rounded-xl border-2 font-black text-sm tabular-nums ${getTimerPhaseClass(state.timeLeft)}`;
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
         function isMultiQuestion(q) {
             return q.multi === 'ON';
         }
@@ -342,17 +388,16 @@
             return sa.every((v, i) => v === sb[i]);
         }
 
-        function handleAnswer(option) {
+        function handleAnswer(idx) {
             if (state.isAnswerCorrect !== null) return;
-
             const currentQ = state.activeQuestions[state.currentQuestion];
+            const option = currentQ.options[idx];
 
             if (isMultiQuestion(currentQ)) {
                 let selected = Array.isArray(state.selectedAnswer) ? [...state.selectedAnswer] : [];
-                const idx = selected.indexOf(option);
-
-                if (idx > -1) {
-                    selected.splice(idx, 1);
+                const pos = selected.indexOf(option);
+                if (pos > -1) {
+                    selected.splice(pos, 1);
                 } else {
                     if (selected.length >= currentQ.maxSelect) return;
                     selected.push(option);
@@ -373,19 +418,14 @@
 
         function checkMultiAnswer() {
             if (state.isAnswerCorrect !== null) return;
-
             const currentQ = state.activeQuestions[state.currentQuestion];
             if (!isMultiQuestion(currentQ)) return;
-
             const selected = Array.isArray(state.selectedAnswer) ? state.selectedAnswer : [];
             if (selected.length === 0) return;
-
             const correctAnswers = Array.isArray(currentQ.answer) ? currentQ.answer : [currentQ.answer];
             state.isAnswerCorrect = arraysEqual(selected, correctAnswers);
-
             if (state.isAnswerCorrect) state.score++;
             render();
-
             if (state.isAnswerCorrect) {
                 setTimeout(() => nextQuestion(), 1000);
             }
@@ -398,6 +438,7 @@
                 state.isAnswerCorrect = null;
                 render();
             } else {
+                stopTimer();
                 state.view = 'results';
                 render();
                 enviarCorreo();
@@ -467,7 +508,7 @@
                 modeDesc = 'Resuelve las 20 preguntas de la Práctica.';
             } else if (state.currentMode === 'evaluacion_final') {
                 modeTitle = '📊 Evaluación';
-                modeDesc = 'Resuelve las 16 preguntas de la Evaluación.';
+                modeDesc = 'Resuelve las 16 preguntas de la Evaluación (tiempo límite: 16 min).';
             }
            
             if (state.view === 'quiz_home') {
@@ -519,19 +560,26 @@
                        </p>`
                     : '';
 
+                const timerHtml = (state.currentMode === 'evaluacion_final')
+                    ? `<div id="eval-timer" class="px-3 py-1.5 rounded-xl border-2 font-black text-sm tabular-nums ${getTimerPhaseClass(state.timeLeft)}">
+                           ${formatTime(state.timeLeft)}
+                       </div>`
+                    : '';
+
                 app.innerHTML = `
                 <div class="animate-fade-in">
-                    <div class="flex justify-between items-center mb-6 px-4">
+                    <div class="flex justify-between items-center mb-6 px-4 gap-4">
                         <span class="font-black text-emerald-600">${state.currentQuestion + 1} / ${state.activeQuestions.length}</span>
-                        <div class="w-48 bg-slate-200 h-2 rounded-full overflow-hidden">
+                        <div class="flex-1 max-w-xs bg-slate-200 h-2 rounded-full overflow-hidden">
                             <div class="bg-emerald-500 h-full transition-all" style="width:${progress}%"></div>
                         </div>
+                        ${timerHtml}
                     </div>
                     <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border">
                         <h2 class="text-2xl font-bold text-slate-800 mb-2 leading-tight">${q.question}</h2>
                         ${multiHint}
                         <div class="grid gap-3">
-                            ${q.options.map(opt => {
+                            ${q.options.map((opt, idx) => {
                                 let style = "border-slate-100 bg-slate-50 hover:border-emerald-200";
                                 const isSelected = selected.includes(opt);
 
@@ -546,10 +594,10 @@
                                             style = "border-emerald-300 bg-emerald-50 text-emerald-700";
                                         }
                                     } else {
-                                        if (isSelected) {
-                                            style = state.isAnswerCorrect
-                                                ? "border-emerald-500 bg-emerald-100 text-emerald-800"
-                                                : "border-red-500 bg-red-100 text-red-800";
+                                        if (opt === q.answer) {
+                                            style = "border-emerald-500 bg-emerald-100 text-emerald-800";
+                                        } else if (isSelected) {
+                                            style = "border-red-500 bg-red-100 text-red-800";
                                         }
                                     }
                                 } else if (isSelected) {
@@ -560,7 +608,7 @@
                                     }
                                 }
 
-                                return `<button onclick="handleAnswer('${opt.replace(/'/g, "\\'")}')" 
+                                return `<button onclick="handleAnswer(${idx})" 
                                             class="p-5 text-left border-2 rounded-xl font-bold transition-all ${style}">
                                             ${opt}
                                         </button>`;
@@ -608,8 +656,8 @@
                 </div>`;
             }
         }
+
         render();
     </script>
 </body>
 </html>
-
