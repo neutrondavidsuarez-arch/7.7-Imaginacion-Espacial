@@ -1,1 +1,1 @@
-# 7.7-Imaginaci-n-Espacial
+# 7.7-Imaginacion-Espacial
